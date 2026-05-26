@@ -56,8 +56,9 @@ def process_packet(packet):
                 print(f"[SUSPICIOUS] {src_ip}"
                       f"sent {ip_packet_count[src_ip]} packets")
                 try:
-                    block_ip(src_ip)
-                    blocked_ip.add(src_ip)
+                    if src_ip not in blocked_ip:
+                        block_ip(src_ip)
+                        blocked_ip.add(src_ip)
                 except:
                     print(f"Not Blocked [ERROR 441]")
             
@@ -113,8 +114,9 @@ def process_packet(packet):
                 print(f"[SUSPICIOUS] {src_ip}"
                       f"sent {ip_packet_count[src_ip]} packets")
                 try:
-                    block_ip(src_ip)
-                    blocked_ip.add(src_ip)
+                    if src_ip not in blocked_ip:
+                        block_ip(src_ip)
+                        blocked_ip.add(src_ip)
                 except:
                     print(f"Not Blocked [ERROR 441]")
 
