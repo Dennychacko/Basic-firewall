@@ -5,7 +5,12 @@ import config
 
 from services import get_service
 from logger import log_packet
+from iptables_manager import block_ip
 
+
+ip_packet_count = {}
+
+PACKET_THRESHOLD = 100;
 
 def process_packet(packet):
 
@@ -37,6 +42,18 @@ def process_packet(packet):
             # If destination unknown, try source port
             if service == "OTHERS":
                 service = get_service(src_port)
+
+            #counting specific ip address packets
+            if src_ip not in ip_packet_count:
+                ip_packet_count[src_ip] = 1
+            else:
+                ip_packet_count[src_ip] += 1
+
+            #checking if THRESHOLD meets
+            if ip_packet_count[src_ip] > PACKET_THRESHOLD:
+                print(f"[SUSPICIOUS] {src_ip}"
+                      f"sent {ip_packet_count[src_ip]} packets")
+            
 
             # Check blocked ports
             if (
@@ -77,6 +94,22 @@ def process_packet(packet):
 
             if service == "OTHERS":
                 service = get_service(src_port)
+
+            #counting specific ip address packets
+            if src_ip not in ip_packet_count:
+                ip_packet_count[src_ip] = 1
+            else:
+                ip_packet_count[src_ip] += 1
+
+            #checking if THRESHOLD meets
+            if ip_packet_count[src_ip] > PACKET_THRESHOLD:
+                print(f"[SUSPICIOUS] {src_ip}"
+                      f"sent {ip_packet_count[src_ip]} packets")
+                try:
+                    block_ip(src_ip)
+                except:
+                    print(f"Not Blocked [ERROR 441]")
+
 
             # Check blocked ports
             if (
