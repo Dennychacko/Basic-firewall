@@ -10,6 +10,8 @@ from iptables_manager import block_ip
 
 ip_packet_count = {}
 
+blocked_ip = set()
+
 PACKET_THRESHOLD = 100;
 
 def process_packet(packet):
@@ -50,9 +52,13 @@ def process_packet(packet):
                 ip_packet_count[src_ip] += 1
 
             #checking if THRESHOLD meets
-            if ip_packet_count[src_ip] > PACKET_THRESHOLD:
+            if (ip_packet_count[src_ip] > PACKET_THRESHOLD and src_ip not in block_ip):
                 print(f"[SUSPICIOUS] {src_ip}"
                       f"sent {ip_packet_count[src_ip]} packets")
+                try:
+                    block_ip(src_ip)
+                except:
+                    print(f"Not Blocked [ERROR 441]")
             
 
             # Check blocked ports
@@ -102,7 +108,7 @@ def process_packet(packet):
                 ip_packet_count[src_ip] += 1
 
             #checking if THRESHOLD meets
-            if ip_packet_count[src_ip] > PACKET_THRESHOLD:
+            if (ip_packet_count[src_ip] > PACKET_THRESHOLD and src_ip not in block_ip):
                 print(f"[SUSPICIOUS] {src_ip}"
                       f"sent {ip_packet_count[src_ip]} packets")
                 try:
