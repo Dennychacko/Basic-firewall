@@ -52,7 +52,7 @@ def process_packet(packet):
                 ip_packet_count[src_ip] += 1
 
             #checking if THRESHOLD meets
-            if (ip_packet_count[src_ip] > PACKET_THRESHOLD and src_ip not in block_ip):
+            if (ip_packet_count[src_ip] > PACKET_THRESHOLD and src_ip not in blocked_ip):
                 print(f"[SUSPICIOUS] {src_ip}"
                       f"sent {ip_packet_count[src_ip]} packets")
                 try:
@@ -110,7 +110,7 @@ def process_packet(packet):
                 ip_packet_count[src_ip] += 1
 
             #checking if THRESHOLD meets
-            if (ip_packet_count[src_ip] > PACKET_THRESHOLD and src_ip not in block_ip):
+            if (ip_packet_count[src_ip] > PACKET_THRESHOLD and src_ip not in blocked_ip):
                 print(f"[SUSPICIOUS] {src_ip}"
                       f"sent {ip_packet_count[src_ip]} packets")
                 try:
